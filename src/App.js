@@ -1,25 +1,35 @@
-import logo from './logo.svg';
-import './App.css';
+import { useState, useEffect } from 'react';
+import './styles/App.css';
 
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+
+  const [advice, setAdvice] = useState([]);
+
+
+  useEffect(() => {
+    requestAdvice();
+  }, []);
+  async function requestAdvice() {
+    const res = await fetch('	https://api.adviceslip.com/advice');
+    const json = await res.json();
+    setAdvice(json);
+    
+  };
+
+ return (
+  <div>
+    {Object.values(advice).map(advice => {
+      return (
+        <div key={advice.id}>
+          <p>Advice #{advice.id}</p>
+          <h1>{advice.advice}</h1>
+        </div>
+      )
+    })}
+    <button onClick={requestAdvice}className="click-btn">Click</button>
+  </div>
+ )
+
 }
 
 export default App;
